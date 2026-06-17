@@ -16,7 +16,7 @@ export async function GET() {
   } catch (e) {}
 
   try {
-    await tenant.googlecalendar.api.calendars.get({ calendarId: 'primary' });
+    await tenant.googlecalendar.api.events.getMany({ calendarId: 'primary', maxResults: 1 });
     calendarConnected = true;
   } catch (e) {}
 
