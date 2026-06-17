@@ -8,12 +8,15 @@ const db = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
+const appUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+
 export const corsair = createCorsair({
   plugins: [gmail(), googlecalendar()],
   database: db,
   kek: process.env.CORSAIR_KEK!,
   multiTenancy: true,
   connect: {
-    redirectUri: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/corsair/callback`,
+    baseUrl: appUrl,
+    redirectUri: `${appUrl}/api/corsair/callback`,
   }
 });
