@@ -12,5 +12,8 @@ export const corsair = createCorsair({
   plugins: [gmail(), googlecalendar()],
   database: db,
   kek: process.env.CORSAIR_KEK!,
-  multiTenancy: true, 
+  multiTenancy: true,
+  connect: {
+    redirectUri: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/corsair/callback`,
+  }
 });

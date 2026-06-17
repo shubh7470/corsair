@@ -1,0 +1,70 @@
+import Header from "@/app/ui/landing/header";
+import Link from "next/link";
+
+export default function PricingPage() {
+  return (
+    <div className="flex flex-col min-h-screen bg-white dark:bg-black font-sans text-gray-900 dark:text-white">
+      <Header />
+      <main className="flex-1 w-full mt-32 px-6 pb-24 flex flex-col items-center">
+        <div className="max-w-4xl w-full text-center mb-16">
+          <h1 className="text-5xl font-bold tracking-tight mb-6">Simple, transparent pricing</h1>
+          <p className="text-xl text-gray-500 dark:text-gray-400">Start for free, upgrade when you need to.</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl w-full">
+          {/* Free Tier */}
+          <div className="bg-zinc-50 dark:bg-zinc-900 rounded-3xl p-8 border border-gray-100 dark:border-zinc-800 flex flex-col">
+            <h3 className="text-2xl font-bold mb-2">Basic</h3>
+            <p className="text-gray-500 dark:text-gray-400 mb-6">Perfect for trying out MailMind.</p>
+            <div className="text-5xl font-extrabold mb-8">$0<span className="text-xl font-medium text-gray-500 dark:text-gray-400">/mo</span></div>
+            
+            <ul className="space-y-4 mb-8 flex-1">
+              <li className="flex items-center gap-3">
+                <span className="text-green-500">✓</span> Up to 50 AI prompts/month
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="text-green-500">✓</span> Basic email summarization
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="text-green-500">✓</span> Calendar scheduling
+              </li>
+            </ul>
+            <button className="w-full bg-white dark:bg-zinc-800 text-gray-900 dark:text-white border border-gray-200 dark:border-zinc-700 rounded-full py-3 font-medium hover:bg-gray-50 dark:hover:bg-zinc-700 transition-colors">
+              Get Started
+            </button>
+          </div>
+
+          {/* Pro Tier */}
+          <div className="bg-blue-600 rounded-3xl p-8 border border-blue-500 flex flex-col text-white shadow-xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">POPULAR</div>
+            <h3 className="text-2xl font-bold mb-2">Pro</h3>
+            <p className="text-blue-100 mb-6">For professionals who need ultimate productivity.</p>
+            <div className="text-5xl font-extrabold mb-8">$15<span className="text-xl font-medium text-blue-200">/mo</span></div>
+            
+            <ul className="space-y-4 mb-8 flex-1">
+              <li className="flex items-center gap-3">
+                <span className="text-white font-bold">✓</span> Unlimited AI prompts
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="text-white font-bold">✓</span> Advanced email drafting
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="text-white font-bold">✓</span> Priority support
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="text-white font-bold">✓</span> Custom integrations
+              </li>
+            </ul>
+            <button className="w-full bg-white text-blue-600 rounded-full py-3 font-bold hover:bg-gray-100 transition-colors">
+              Upgrade to Pro
+            </button>
+          </div>
+        </div>
+
+        <div className="mt-16">
+          <Link href="/" className="text-blue-600 hover:underline font-medium">← Back to Home</Link>
+        </div>
+      </main>
+    </div>
+  );
+}
