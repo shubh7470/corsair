@@ -5,13 +5,13 @@ import { authOptions } from "@/app/lib/auth";
 export async function GET() {
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) return Response.json({ error: "Unauthorized" }, { status: 401 });
-  
+
   const tenant = corsair.withTenant(session.user.email);
   let gmailConnected = false;
   let calendarConnected = false;
 
   try {
-    await tenant.gmail.api.users.getProfile({ userId: 'me' });
+    await tenant.gmail.api.messages.list({ maxResults: 1 });
     gmailConnected = true;
   } catch (e) {}
 
