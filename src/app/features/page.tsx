@@ -11,11 +11,11 @@ export default function FeaturesPage() {
           <p className="text-xl text-gray-500 dark:text-gray-400">Everything you need to manage your email and schedule with AI.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl w-full text-left">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl w-full text-left mb-24">
           <div className="bg-zinc-50 dark:bg-zinc-900 rounded-2xl p-8 border border-gray-100 dark:border-zinc-800">
             <h3 className="text-2xl font-semibold mb-4">Smart Replies</h3>
             <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-              MailMind uses advanced AI models to read incoming emails and instantly draft personalized, context-aware responses. Save hours of typing.
+              Maical uses advanced AI models to read incoming emails and instantly draft personalized, context-aware responses. Save hours of typing.
             </p>
           </div>
           
@@ -38,6 +38,25 @@ export default function FeaturesPage() {
             <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
               Interact with your inbox like you would with a human assistant. Ask "Did I get the invoice from Acme Corp?" and get instant answers.
             </p>
+          </div>
+        </div>
+
+        {/* Why Choose Section */}
+        <div className="max-w-4xl w-full text-left bg-blue-50 dark:bg-blue-900/10 p-10 rounded-3xl border border-blue-100 dark:border-blue-800/30">
+          <h2 className="text-3xl font-bold mb-6 text-blue-900 dark:text-blue-100">Why choose Maical?</h2>
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-xl font-semibold mb-2 text-blue-800 dark:text-blue-200">1. Action-Oriented AI</h3>
+              <p className="text-blue-700/80 dark:text-blue-200/70">Unlike standard chatbots that just output text, Maical is connected directly to your Google tools. It doesn't just draft emails; it sends them. It doesn't just suggest times; it books the calendar events.</p>
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold mb-2 text-blue-800 dark:text-blue-200">2. Privacy First Design</h3>
+              <p className="text-blue-700/80 dark:text-blue-200/70">We never train our models on your personal email data. Your data is fetched securely on-the-fly and processed securely. We believe your inbox belongs to you.</p>
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold mb-2 text-blue-800 dark:text-blue-200">3. Lightning Fast</h3>
+              <p className="text-blue-700/80 dark:text-blue-200/70">Built on modern edge infrastructure, Maical responses feel instantaneous. Say goodbye to waiting for clunky interfaces to load.</p>
+            </div>
           </div>
         </div>
 

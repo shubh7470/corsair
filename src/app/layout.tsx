@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MailMind - AI Assistant",
+  title: "Maical - AI Assistant",
   description: "AI Assistant for Gmail and Google Calendar",
 };
 
