@@ -1,4 +1,5 @@
 import Header from "@/app/ui/landing/header";
+import Footer from "@/app/ui/landing/footer";
 import Link from "next/link";
 
 export default function DocsPage() {
@@ -82,6 +83,7 @@ export default function DocsPage() {
 
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

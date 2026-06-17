@@ -2,7 +2,14 @@ import React from 'react';
 
 export default function Hero() {
   return (
-    <section className="flex flex-col items-center pt-32 pb-16 px-4 w-full text-center">
+    <section className="relative flex flex-col items-center pt-32 pb-16 px-4 w-full text-center overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0 -z-10 pointer-events-none">
+        <div className="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-400/20 dark:bg-blue-600/20 blur-[120px] animate-pulse" style={{ animationDuration: '4s' }}></div>
+        <div className="absolute top-[20%] -right-[10%] w-[40%] h-[50%] rounded-full bg-purple-400/20 dark:bg-purple-600/20 blur-[120px] animate-pulse" style={{ animationDelay: '1s', animationDuration: '5s' }}></div>
+        <div className="absolute bottom-[0%] left-[20%] w-[60%] h-[50%] rounded-full bg-indigo-400/10 dark:bg-indigo-600/10 blur-[120px] animate-pulse" style={{ animationDelay: '2s', animationDuration: '6s' }}></div>
+      </div>
+
       {/* Top Badge */}
       <div className="flex items-center gap-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full px-4 py-1.5 text-sm font-medium mb-8 border border-blue-100 dark:border-blue-800/50">
         <svg

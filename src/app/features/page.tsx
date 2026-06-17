@@ -1,4 +1,5 @@
 import Header from "@/app/ui/landing/header";
+import Footer from "@/app/ui/landing/footer";
 import Link from "next/link";
 
 export default function FeaturesPage() {
@@ -64,6 +65,7 @@ export default function FeaturesPage() {
           <Link href="/" className="text-blue-600 hover:underline font-medium">← Back to Home</Link>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

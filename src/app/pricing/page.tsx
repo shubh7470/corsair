@@ -1,4 +1,5 @@
 import Header from "@/app/ui/landing/header";
+import Footer from "@/app/ui/landing/footer";
 import Link from "next/link";
 
 export default function PricingPage() {
@@ -84,6 +85,7 @@ export default function PricingPage() {
           <Link href="/" className="text-blue-600 hover:underline font-medium">← Back to Home</Link>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }
