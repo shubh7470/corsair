@@ -1,17 +1,21 @@
-export { default } from "next-auth/middleware";
+// src/middleware.ts
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { getToken } from "next-auth/jwt";
+
+export async function middleware(req: NextRequest) {
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+  if (!token) {
+    const loginUrl = new URL("/login", req.url);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  return NextResponse.next();
+}
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api/auth (NextAuth routes)
-     * - login (auth page)
-     * - features, how-it-works, pricing, docs (public marketing pages)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico, logo.png (static assets)
-     * - $ (the root path /)
-     */
     "/((?!api/auth|login|features|how-it-works|pricing|docs|_next/static|_next/image|favicon.ico|logo.png|$).*)",
   ],
 };
