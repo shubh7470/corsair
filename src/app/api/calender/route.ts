@@ -8,7 +8,7 @@ export async function GET() {
   
   try {
     const tenant = corsair.withTenant(session.user.email);
-    const eventsResponse = await tenant.googlecalendar.db.events.search({
+    const eventsResponse: any = await tenant.googlecalendar.db.events.search({
       limit: 20,
     });
     // Ensure we always return an array
