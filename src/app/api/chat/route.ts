@@ -1,5 +1,5 @@
 import { OpenAIAgentsProvider } from '@corsair-dev/mcp';
-import { Agent, run, tool } from '@openai/agents';
+import { Agent, run, tool, user, assistant } from '@openai/agents';
 import { corsair } from '@/app/lib/corsair';
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/lib/auth";
@@ -10,7 +10,7 @@ export async function POST(req: Request) {
         return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { message } = await req.json();
+    const { message, messages } = await req.json();
     const provider = new OpenAIAgentsProvider();
     
     // Connect to the specific user's tenant
@@ -33,10 +33,17 @@ export async function POST(req: Request) {
             `CRITICAL: When the user asks you to read or fetch their emails, the "list messages" tool will only return email IDs. ` +
             `You MUST take those IDs and use the "get message" tool to fetch the actual details (Subject, Sender, Snippet, Date) ` +
             `BEFORE replying to the user. NEVER show raw IDs to the user. Always summarize the actual email contents clearly.\n` +
-            `CRITICAL CALENDAR INSTRUCTIONS: When scheduling an event for "today" or "tomorrow", use the current date provided above to accurately determine the exact date and time. Do NOT hallucinate dates.`,
+            `CRITICAL CALENDAR INSTRUCTIONS: When scheduling an event for "today" or "tomorrow", use the current date provided above to accurately determine the exact date and time. Do NOT hallucinate dates.\n` +
+            `CRITICAL CALENDAR INSTRUCTIONS: NEVER set "eventType: 'outOfOffice'" or other special event types. Always create standard default events to avoid Bad Request errors.\n` +
+            `CRITICAL: If any tool returns an error (like "Forbidden", "Unauthorized", or missing credentials), you MUST NOT pretend the action succeeded. You MUST tell the user exactly what failed and ask them to click the "Connect Calendar" or "Connect Google" button in the sidebar.`,
         tools,
     });
     
-    const result = await run(agent, message);
+    let inputToRun: any = message;
+    if (messages && Array.isArray(messages)) {
+        inputToRun = messages.map((m: any) => m.role === 'assistant' ? assistant(m.content) : user(m.content));
+    }
+    
+    const result = await run(agent, inputToRun);
     return Response.json({ response: result.finalOutput });
 }
