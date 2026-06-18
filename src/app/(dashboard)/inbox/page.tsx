@@ -185,7 +185,7 @@ export default function InboxPage() {
     <div className="flex h-full bg-[#0A0A0B] text-white overflow-hidden font-sans">
       
       {/* 1. Middle Column: Email List */}
-      <div className="w-[380px] flex-shrink-0 flex flex-col border-r border-[#1C1C1F]">
+      <div className={`w-full md:w-[380px] flex-shrink-0 flex-col border-r border-[#1C1C1F] ${selectedEmail ? 'hidden md:flex' : 'flex'}`}>
         
         {/* Header */}
         <div className="px-5 pt-6 pb-4">
@@ -288,19 +288,20 @@ export default function InboxPage() {
       </div>
 
       {/* 2. Right Column: Reading Pane */}
-      <div className="flex-1 flex flex-col bg-[#0A0A0B] overflow-hidden relative m-2 rounded-2xl border border-[#1C1C1F]">
+      <div className={`flex-1 flex-col bg-[#0A0A0B] overflow-hidden relative md:m-2 md:rounded-2xl md:border border-[#1C1C1F] ${selectedEmail ? 'flex' : 'hidden md:flex'}`}>
         {selectedEmail ? (
           <>
             {/* Top Action Bar */}
-            <div className="h-14 flex items-center justify-between px-4 border-b border-[#1C1C1F] shrink-0 bg-[#0E0E12]">
+            <div className="h-14 flex items-center justify-between px-2 md:px-4 border-b border-[#1C1C1F] shrink-0 bg-[#0E0E12]">
               <div className="flex items-center gap-1 text-zinc-400">
-                <button className="w-8 h-8 flex items-center justify-center rounded hover:bg-[#18181B] transition-colors"><ArrowLeftIcon /></button>
-                <div className="w-px h-4 bg-zinc-800 mx-2"></div>
+                <button onClick={() => setSelectedEmail(null)} className="w-8 h-8 flex md:hidden items-center justify-center rounded hover:bg-[#18181B] transition-colors text-white"><ArrowLeftIcon /></button>
+                <button className="w-8 h-8 hidden md:flex items-center justify-center rounded hover:bg-[#18181B] transition-colors"><ArrowLeftIcon /></button>
+                <div className="w-px h-4 bg-zinc-800 mx-1 md:mx-2"></div>
                 <button className="w-8 h-8 flex items-center justify-center rounded hover:bg-[#18181B] transition-colors"><ArchiveIcon /></button>
                 <button className="w-8 h-8 flex items-center justify-center rounded hover:bg-[#18181B] transition-colors"><TrashIcon /></button>
                 <button className="w-8 h-8 flex items-center justify-center rounded hover:bg-[#18181B] transition-colors"><FolderIcon /></button>
-                <button className="w-8 h-8 flex items-center justify-center rounded hover:bg-[#18181B] transition-colors"><TagIcon /></button>
-                <button className="w-8 h-8 flex items-center justify-center rounded hover:bg-[#18181B] transition-colors"><ClockIcon /></button>
+                <button className="w-8 h-8 hidden sm:flex items-center justify-center rounded hover:bg-[#18181B] transition-colors"><TagIcon /></button>
+                <button className="w-8 h-8 hidden sm:flex items-center justify-center rounded hover:bg-[#18181B] transition-colors"><ClockIcon /></button>
                 <button className="w-8 h-8 flex items-center justify-center rounded hover:bg-[#18181B] transition-colors"><MoreIcon /></button>
               </div>
               <div className="flex items-center gap-2 text-zinc-500">
@@ -311,15 +312,15 @@ export default function InboxPage() {
             </div>
 
             {/* Email Header Area */}
-            <div className="px-10 py-8 bg-[#0A0A0B] shrink-0">
+            <div className="px-5 md:px-10 py-6 md:py-8 bg-[#0A0A0B] shrink-0">
               <div className="flex items-start justify-between mb-6">
-                <h1 className="text-2xl font-semibold text-white flex items-center gap-3 flex-wrap">
+                <h1 className="text-xl md:text-2xl font-semibold text-white flex items-center gap-3 flex-wrap">
                   {getHeader(selectedEmail, "Subject")}
-                  <span className="text-xs font-medium bg-indigo-500/20 text-indigo-300 px-2.5 py-1 rounded-md border border-indigo-500/30 flex items-center gap-1">
+                  <span className="text-[10px] md:text-xs font-medium bg-indigo-500/20 text-indigo-300 px-2 md:px-2.5 py-1 rounded-md border border-indigo-500/30 flex items-center gap-1">
                     Work <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                   </span>
                 </h1>
-                <button className="flex items-center gap-2 bg-[#312E81] hover:bg-indigo-800 text-indigo-100 px-4 py-1.5 rounded-lg text-sm font-medium transition-colors shrink-0">
+                <button className="hidden sm:flex items-center gap-2 bg-[#312E81] hover:bg-indigo-800 text-indigo-100 px-4 py-1.5 rounded-lg text-sm font-medium transition-colors shrink-0">
                   <ReplyIcon /> Reply <span className="ml-1 opacity-60">v</span>
                 </button>
               </div>
@@ -346,9 +347,9 @@ export default function InboxPage() {
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto px-10 pb-10 custom-scrollbar relative">
+            <div className="flex-1 overflow-y-auto px-5 md:px-10 pb-10 custom-scrollbar relative">
               {/* AI Summary Block (Mocked) */}
-              <div className="mb-8 rounded-xl bg-gradient-to-r from-[#1E1B4B] to-[#17172B] p-5 border border-indigo-500/20 shadow-inner">
+              <div className="mb-6 md:mb-8 rounded-xl bg-gradient-to-r from-[#1E1B4B] to-[#17172B] p-4 md:p-5 border border-indigo-500/20 shadow-inner">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-indigo-400"><SparklesIcon /></span>
                   <h3 className="text-sm font-semibold text-indigo-100">Maical AI Summary <span className="text-[10px] bg-indigo-500/30 px-1.5 py-0.5 rounded text-indigo-300 ml-1">BETA</span></h3>
@@ -356,10 +357,10 @@ export default function InboxPage() {
                 <p className="text-sm text-indigo-50/80 leading-relaxed mb-4">
                   The sender shared the latest project update and outlined next steps. The design phase is 98% complete and development starts tomorrow.
                 </p>
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap">
                   <span className="text-xs bg-indigo-950 border border-indigo-800 text-indigo-200 px-3 py-1 rounded-full cursor-pointer hover:bg-indigo-900 transition-colors">Project Update</span>
                   <span className="text-xs bg-indigo-950 border border-indigo-800 text-indigo-200 px-3 py-1 rounded-full cursor-pointer hover:bg-indigo-900 transition-colors">Next Steps</span>
-                  <span className="text-xs bg-indigo-950 border border-indigo-800 text-indigo-200 px-3 py-1 rounded-full cursor-pointer hover:bg-indigo-900 transition-colors">Design 98% Complete</span>
+                  <span className="hidden sm:inline-flex text-xs bg-indigo-950 border border-indigo-800 text-indigo-200 px-3 py-1 rounded-full cursor-pointer hover:bg-indigo-900 transition-colors">Design 98% Complete</span>
                   <span className="text-xs text-indigo-400 px-3 py-1 cursor-pointer hover:text-indigo-300 transition-colors">Show more v</span>
                 </div>
               </div>

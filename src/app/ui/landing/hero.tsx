@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Hero() {
   return (
-    <section className="relative flex flex-col items-center pt-32 pb-16 px-4 w-full text-center overflow-hidden">
+    <section className="relative flex flex-col items-center pt-24 md:pt-32 pb-16 px-4 w-full text-center overflow-hidden">
       {/* Animated Background */}
       <div className="absolute inset-0 -z-10 pointer-events-none">
         <div className="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-400/20 dark:bg-blue-600/20 blur-[120px] animate-pulse" style={{ animationDuration: '4s' }}></div>
@@ -33,14 +33,14 @@ export default function Hero() {
       </div>
 
       {/* Main Title */}
-      <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-gray-900 dark:text-white mb-6 leading-[1.1] max-w-3xl">
+      <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight text-gray-900 dark:text-white mb-4 md:mb-6 leading-[1.1] max-w-3xl">
         Manage Gmail & <br className="hidden md:block" />
         Google Calendar <br className="hidden md:block" />
         <span className="text-blue-600">with AI.</span>
       </h1>
 
       {/* Subtitle */}
-      <p className="text-lg md:text-xl text-gray-500 dark:text-gray-400 mb-12 max-w-2xl">
+      <p className="text-base sm:text-lg md:text-xl text-gray-500 dark:text-gray-400 mb-8 md:mb-12 max-w-2xl px-2">
         One AI assistant to read emails, reply automatically, <br className="hidden md:block" />
         and schedule meetings in your calendar.
       </p>

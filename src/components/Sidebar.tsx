@@ -66,6 +66,14 @@ const PlusIcon = () => (
   </svg>
 );
 
+const MenuIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="3" y1="12" x2="21" y2="12"></line>
+    <line x1="3" y1="6" x2="21" y2="6"></line>
+    <line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+);
+
 const ViewIcons = {
   primary: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>,
   social: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>,
@@ -79,6 +87,7 @@ export function Sidebar() {
   const { data: session } = useSession();
   const [dashboardData, setDashboardData] = useState({ unreadEmails: 0, todayEvents: [] });
   const [status, setStatus] = useState({ gmailConnected: false, calendarConnected: false });
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     fetch("/api/status")
@@ -103,19 +112,47 @@ export function Sidebar() {
   ];
 
   return (
-    <div className="flex h-screen w-[280px] flex-col border-r border-[#1C1C1F] bg-[#0A0A0B] text-zinc-300 p-5 font-sans">
-      {/* Brand Header */}
-      <div className="mb-8 flex items-center justify-between px-1">
+    <>
+      {/* Mobile Header */}
+      <div className="md:hidden flex items-center justify-between p-4 border-b border-[#1C1C1F] bg-[#0A0A0B] shrink-0">
         <div className="flex items-center gap-3">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-bold text-lg shadow-[0_0_15px_rgba(99,102,241,0.5)]">
             M
           </div>
-          <span className="text-xl font-bold tracking-tight text-white">
-            Maical
-          </span>
+          <span className="text-xl font-bold tracking-tight text-white">Maical</span>
         </div>
-        <PanelRightIcon />
+        <button onClick={() => setIsMobileMenuOpen(true)} className="text-zinc-300 hover:text-white">
+          <MenuIcon />
+        </button>
       </div>
+
+      {/* Overlay */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden" onClick={() => setIsMobileMenuOpen(false)} />
+      )}
+
+      {/* Sidebar Drawer */}
+      <div className={`fixed inset-y-0 left-0 z-50 flex h-full w-[280px] flex-col border-r border-[#1C1C1F] bg-[#0A0A0B] text-zinc-300 p-5 font-sans transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}>
+        {/* Brand Header */}
+        <div className="mb-8 flex items-center justify-between px-1 hidden md:flex">
+          <div className="flex items-center gap-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-bold text-lg shadow-[0_0_15px_rgba(99,102,241,0.5)]">
+              M
+            </div>
+            <span className="text-xl font-bold tracking-tight text-white">
+              Maical
+            </span>
+          </div>
+          <PanelRightIcon />
+        </div>
+        
+        {/* Mobile Close Button (Optional, clicking overlay works too, but good UX) */}
+        <div className="mb-8 flex items-center justify-between px-1 md:hidden">
+          <span className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Menu</span>
+          <button onClick={() => setIsMobileMenuOpen(false)} className="text-zinc-500 hover:text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
 
       {/* Navigation Links */}
       <nav className="space-y-1.5 mb-8">
@@ -286,5 +323,6 @@ export function Sidebar() {
         </div>
       </div>
     </div>
+    </>
   );
 }

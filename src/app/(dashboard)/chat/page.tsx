@@ -151,81 +151,106 @@ export default function DashboardPage() {
 
   const name = session?.user?.name?.split(' ')[0] || "User";
 
-  // Fallback suggestions if there is no recent activity
+  // Fallback suggestions
   const activityFallback = [
-    { id: 'f1', title: "Try Summarizing Emails", desc: "Ask Maical to summarize your unread inbox", time: "", icon: <span className="text-purple-400"><SparklesIcon /></span> },
-    { id: 'f2', title: "Schedule a Meeting", desc: "Ask Maical to block time on your calendar", time: "", icon: <span className="text-blue-400"><CalendarIcon /></span> },
-    { id: 'f3', title: "Draft a Reply", desc: "Let Maical write an email for you", time: "", icon: <span className="text-green-400"><MailIcon /></span> },
+    { id: 'f1', title: "Try Summarizing Emails", desc: "Ask Maical to summarize your unread inbox", icon: <span className="text-purple-400"><SparklesIcon /></span> },
+    { id: 'f2', title: "Schedule a Meeting", desc: "Ask Maical to block time on your calendar", icon: <span className="text-blue-400"><CalendarIcon /></span> },
   ];
 
   const activitiesToDisplay = dashboardData.recentActivity?.length > 0 
-    ? dashboardData.recentActivity.map((act: any) => ({
+    ? dashboardData.recentActivity.slice(0, 2).map((act: any) => ({
         id: act.id,
         title: act.title,
         desc: act.desc,
-        time: act.time,
         icon: act.type === 'email' ? <span className="text-purple-400"><MailIcon /></span> : <span className="text-blue-400"><CheckCircleIcon /></span>
       }))
     : activityFallback;
 
   return (
-    <div className="flex h-screen w-full bg-[#0A0A0B] text-white overflow-hidden relative font-sans">
+    <div className="flex h-screen w-full bg-[#0A0A0B] text-white overflow-hidden relative font-sans p-0 md:p-4 md:pl-0">
       
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col h-full overflow-y-auto px-10 py-12">
+      <div className="flex-1 flex flex-col min-w-0 bg-[#0A0A0B] md:border border-[#1C1C1F] md:rounded-2xl overflow-hidden relative">
         
-        {/* Header / Greeting */}
-        <div className="flex justify-between items-start mb-8 w-full max-w-4xl mx-auto">
-          <div>
-            <h1 className="text-3xl font-semibold mb-2">
-              {getGreeting()}, {name}! <span className="text-yellow-400">👋</span>
-            </h1>
-            <p className="text-zinc-400">What would you like Maical AI to help you with today?</p>
-          </div>
-          <button className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#18181B] border border-zinc-800 text-zinc-400 hover:text-white transition-colors">
-            <HistoryIcon />
-          </button>
-        </div>
-
-        {/* Prompt Input Box */}
-        <div className="w-full max-w-4xl mx-auto bg-[#131316] border border-[#1C1C1F] rounded-2xl p-4 shadow-lg mb-10 flex flex-col min-h-[140px]">
+        {/* Scrollable Messages / Greeting Area */}
+        <div className="flex-1 overflow-y-auto px-4 md:px-10 py-8 custom-scrollbar relative flex flex-col">
           {messages.length === 0 ? (
-             <form onSubmit={(e) => handleSubmit(e)} className="flex-1 flex flex-col h-full">
-               <textarea
-                 value={input}
-                 onChange={(e) => setInput(e.target.value)}
-                 onKeyDown={(e) => {
-                   if (e.key === "Enter" && !e.shiftKey) {
-                     e.preventDefault();
-                     handleSubmit(e);
-                   }
-                 }}
-                 placeholder="Ask anything... e.g. Summarize unread emails, schedule a meeting, draft a reply"
-                 className="w-full flex-1 resize-none bg-transparent text-[15px] text-white placeholder-zinc-500 focus:outline-none"
-               />
-               <div className="flex justify-between items-center mt-auto pt-2">
-                 <div className="flex gap-2">
-                   <button type="button" className="flex items-center gap-2 rounded-lg border border-zinc-800 px-3 py-1.5 text-xs font-medium text-zinc-300 hover:bg-[#1C1C1F] transition-colors">
-                     <MailIcon /> Emails
-                   </button>
-                   <button type="button" className="flex items-center gap-2 rounded-lg border border-zinc-800 px-3 py-1.5 text-xs font-medium text-zinc-300 hover:bg-[#1C1C1F] transition-colors">
-                     <CalendarIcon /> Calendar
-                   </button>
-                   <button type="button" className="flex items-center gap-2 rounded-lg border border-zinc-800 px-3 py-1.5 text-xs font-medium text-zinc-300 hover:bg-[#1C1C1F] transition-colors">
-                     <CheckCircleIcon /> Tasks
-                   </button>
-                 </div>
-                 <button
-                   type="submit"
-                   disabled={!input.trim() || isLoading}
-                   className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100 shadow-[0_0_15px_rgba(99,102,241,0.4)]"
-                 >
-                   <SendIcon />
-                 </button>
-               </div>
-             </form>
+            <div className="w-full max-w-3xl mx-auto flex-1 flex flex-col pt-10 md:pt-20">
+              {/* Greeting */}
+              <div className="flex flex-col items-center text-center mb-16">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-3xl shadow-[0_0_30px_rgba(99,102,241,0.3)] mb-6">
+                  M
+                </div>
+                <h1 className="text-3xl font-semibold mb-3">
+                  {getGreeting()}, {name}! <span className="text-yellow-400">👋</span>
+                </h1>
+                <p className="text-zinc-400 text-lg">How can Maical help you today?</p>
+              </div>
+              
+              {/* Suggestions Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-auto mb-4">
+                {activitiesToDisplay.map((activity) => (
+                  <div 
+                    key={activity.id} 
+                    onClick={() => handleSubmit(undefined, activity.title)}
+                    className="bg-[#131316] border border-[#1C1C1F] rounded-2xl p-4 flex items-center gap-4 hover:bg-[#18181B] hover:border-zinc-700/50 transition-all cursor-pointer group"
+                  >
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#1C1C1F] border border-zinc-800 group-hover:scale-110 transition-transform">
+                      {activity.icon}
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-zinc-200">{activity.title}</p>
+                      <p className="text-xs text-zinc-500 mt-0.5">{activity.desc}</p>
+                    </div>
+                  </div>
+                ))}
+                
+                {dashboardData.todayEvents.length > 0 ? (
+                  <div 
+                    onClick={() => handleSubmit(undefined, "Show me details about my next meeting")}
+                    className="bg-[#131316] border border-[#1C1C1F] rounded-2xl p-4 flex items-center gap-4 hover:bg-[#18181B] hover:border-zinc-700/50 transition-all cursor-pointer group"
+                  >
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400 group-hover:scale-110 transition-transform border border-blue-500/20">
+                      <CalendarIcon />
+                    </div>
+                    <div className="overflow-hidden">
+                      <p className="text-sm font-medium text-zinc-200 truncate">{dashboardData.todayEvents[0].summary}</p>
+                      <p className="text-xs text-zinc-500 mt-0.5">
+                        {new Date(dashboardData.todayEvents[0].start.dateTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <div 
+                    onClick={() => handleSubmit(undefined, "Schedule a team standup tomorrow morning")}
+                    className="bg-[#131316] border border-[#1C1C1F] rounded-2xl p-4 flex items-center gap-4 hover:bg-[#18181B] hover:border-zinc-700/50 transition-all cursor-pointer group"
+                  >
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400 group-hover:scale-110 transition-transform border border-blue-500/20">
+                      <CalendarIcon />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-zinc-200">Schedule Team Standup</p>
+                      <p className="text-xs text-zinc-500 mt-0.5">No upcoming meetings today</p>
+                    </div>
+                  </div>
+                )}
+                
+                <div 
+                  onClick={() => handleSubmit(undefined, "Check my pending tasks")}
+                  className="bg-[#131316] border border-[#1C1C1F] rounded-2xl p-4 flex items-center gap-4 hover:bg-[#18181B] hover:border-zinc-700/50 transition-all cursor-pointer group"
+                >
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-500/10 text-green-400 group-hover:scale-110 transition-transform border border-green-500/20">
+                    <CheckCircleIcon />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-zinc-200">Pending Tasks</p>
+                    <p className="text-xs text-zinc-500 mt-0.5">Follow up with John & Sarah</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           ) : (
-            <div className="flex-1 overflow-y-auto max-h-[50vh] pr-2 space-y-6 mb-4">
+            <div className="w-full max-w-3xl mx-auto space-y-6 pb-4">
               {messages.map((m) => (
                 <div key={m.id} className={`flex gap-4 ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                   {m.role === "assistant" && (
@@ -233,7 +258,7 @@ export default function DashboardPage() {
                       <BotIcon />
                     </div>
                   )}
-                  <div className={`max-w-[85%] rounded-2xl px-5 py-3.5 text-[15px] leading-relaxed ${
+                  <div className={`max-w-[85%] rounded-2xl px-5 py-3.5 text-[15px] leading-relaxed whitespace-pre-wrap ${
                     m.role === "user" ? "bg-gradient-to-br from-indigo-600 to-purple-600 text-white" : "bg-[#18181B] text-zinc-200 border border-zinc-800"
                   }`}>
                     {m.content}
@@ -255,164 +280,51 @@ export default function DashboardPage() {
               <div ref={messagesEndRef} />
             </div>
           )}
-          
-          {messages.length > 0 && (
-            <form onSubmit={(e) => handleSubmit(e)} className="flex items-center gap-2 border-t border-zinc-800 pt-3 mt-auto">
-               <textarea
-                 value={input}
-                 onChange={(e) => setInput(e.target.value)}
-                 onKeyDown={(e) => {
-                   if (e.key === "Enter" && !e.shiftKey) {
-                     e.preventDefault();
-                     handleSubmit(e);
-                   }
-                 }}
-                 placeholder="Type a message..."
-                 className="flex-1 resize-none bg-transparent py-2 text-[15px] text-white placeholder-zinc-500 focus:outline-none"
-                 rows={1}
-               />
-               <button type="submit" disabled={!input.trim() || isLoading} className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-indigo-600 text-white hover:bg-indigo-500 disabled:opacity-50">
-                 <SendIcon />
-               </button>
+        </div>
+
+        {/* Anchored Bottom Input Box */}
+        <div className="w-full max-w-3xl mx-auto px-4 md:px-0 pb-6 shrink-0 bg-[#0A0A0B]">
+          <div className="bg-[#131316] border border-[#1C1C1F] rounded-2xl p-3 shadow-lg flex flex-col transition-shadow focus-within:ring-1 focus-within:ring-indigo-500/50 focus-within:border-indigo-500/50">
+            <form onSubmit={(e) => handleSubmit(e)} className="flex flex-col">
+              <textarea
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSubmit(e);
+                  }
+                }}
+                placeholder="Message Maical..."
+                className="w-full resize-none bg-transparent text-[15px] text-white placeholder-zinc-500 focus:outline-none min-h-[44px] max-h-[200px] overflow-y-auto px-1 py-2"
+                rows={1}
+              />
+              <div className="flex justify-between items-end sm:items-center mt-2 gap-2 border-t border-[#1C1C1F] pt-2">
+                <div className="flex gap-1.5 sm:gap-2 flex-wrap max-w-[80%] sm:max-w-none">
+                  <button type="button" className="flex items-center gap-1 sm:gap-2 rounded-lg border border-zinc-800 px-2 sm:px-3 py-1.5 text-[10px] sm:text-xs font-medium text-zinc-400 hover:text-zinc-200 hover:bg-[#1C1C1F] transition-colors shrink-0">
+                    <MailIcon /> Emails
+                  </button>
+                  <button type="button" className="flex items-center gap-1 sm:gap-2 rounded-lg border border-zinc-800 px-2 sm:px-3 py-1.5 text-[10px] sm:text-xs font-medium text-zinc-400 hover:text-zinc-200 hover:bg-[#1C1C1F] transition-colors shrink-0">
+                    <CalendarIcon /> Calendar
+                  </button>
+                  <button type="button" className="flex items-center gap-1 sm:gap-2 rounded-lg border border-zinc-800 px-2 sm:px-3 py-1.5 text-[10px] sm:text-xs font-medium text-zinc-400 hover:text-zinc-200 hover:bg-[#1C1C1F] transition-colors shrink-0">
+                    <CheckCircleIcon /> Tasks
+                  </button>
+                </div>
+                <button
+                  type="submit"
+                  disabled={!input.trim() || isLoading}
+                  className="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-lg bg-indigo-600 text-white transition-all hover:bg-indigo-500 disabled:opacity-50 disabled:hover:bg-indigo-600"
+                >
+                  <SendIcon />
+                </button>
+              </div>
             </form>
-          )}
-        </div>
-
-        {/* Recent Activity (Only show if no active chat) */}
-        {messages.length === 0 && (
-          <div className="w-full max-w-4xl mx-auto">
-            <div className="flex justify-between items-center mb-4 px-1">
-              <div className="flex items-center gap-2 text-sm font-medium text-zinc-300">
-                <span className="text-blue-500">{dashboardData.recentActivity?.length > 0 ? <HistoryIcon /> : <SparklesIcon />}</span>
-                {dashboardData.recentActivity?.length > 0 ? "Recent Activity" : "Quick Suggestions"}
-              </div>
-              <button className="text-xs font-medium text-zinc-500 bg-[#131316] border border-zinc-800 rounded-lg px-3 py-1.5 hover:text-zinc-300 transition-colors">
-                {dashboardData.recentActivity?.length > 0 ? "All Activity v" : "View All v"}
-              </button>
-            </div>
-            <div className="bg-[#131316] border border-[#1C1C1F] rounded-2xl flex flex-col divide-y divide-[#1C1C1F]">
-              {activitiesToDisplay.map((activity) => (
-                <div key={activity.id} className="flex items-center justify-between p-4 hover:bg-[#18181B] transition-colors cursor-pointer first:rounded-t-2xl last:rounded-b-2xl">
-                  <div className="flex items-center gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1C1C1F] border border-zinc-800">
-                      {activity.icon}
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-zinc-200">{activity.title}</p>
-                      <p className="text-xs text-zinc-500">{activity.desc}</p>
-                    </div>
-                  </div>
-                  <span className="text-xs text-zinc-500">{activity.time}</span>
-                </div>
-              ))}
-            </div>
           </div>
-        )}
-
-      </div>
-
-      {/* Right Panel */}
-      <div className="w-[340px] border-l border-[#1C1C1F] bg-[#0A0A0B] p-6 flex flex-col gap-6 overflow-y-auto">
-        
-        {/* AI Suggestions Widget */}
-        <div className="bg-[#131316] border border-[#1C1C1F] rounded-2xl p-5">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-medium text-zinc-300 flex items-center gap-2">
-              <span className="text-indigo-400"><SparklesIcon /></span> AI Suggestions
-            </h3>
-            <button className="text-zinc-500 hover:text-zinc-300"><HistoryIcon /></button>
-          </div>
-          
-          <div className="space-y-3">
-            <div className="bg-[#18181B] rounded-xl p-3 flex gap-3 cursor-pointer hover:bg-[#1C1C1F] border border-zinc-800/50 transition-colors" onClick={() => handleSubmit(undefined, "Summarize my unread emails")}>
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-indigo-500/10 text-indigo-400 mt-0.5">
-                <MailIcon />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-zinc-200">You have {dashboardData.unreadEmails} unread emails</p>
-                <p className="text-xs text-zinc-500">Click to summarize</p>
-              </div>
-            </div>
-            
-            {dashboardData.todayEvents.length > 0 ? (
-              <div className="bg-[#18181B] rounded-xl p-3 flex gap-3 cursor-pointer hover:bg-[#1C1C1F] border border-zinc-800/50 transition-colors">
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-500/10 text-blue-400 mt-0.5">
-                  <CalendarIcon />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-zinc-200">{dashboardData.todayEvents[0].summary}</p>
-                  <p className="text-xs text-zinc-500">
-                    {new Date(dashboardData.todayEvents[0].start.dateTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <div className="bg-[#18181B] rounded-xl p-3 flex gap-3 cursor-pointer hover:bg-[#1C1C1F] border border-zinc-800/50 transition-colors" onClick={() => handleSubmit(undefined, "Schedule a team standup tomorrow morning")}>
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-500/10 text-blue-400 mt-0.5">
-                  <CalendarIcon />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-zinc-200">Schedule Team Standup</p>
-                  <p className="text-xs text-zinc-500">No upcoming meetings today</p>
-                </div>
-              </div>
-            )}
-            
-            <div className="bg-[#18181B] rounded-xl p-3 flex gap-3 cursor-pointer hover:bg-[#1C1C1F] border border-zinc-800/50 transition-colors" onClick={() => handleSubmit(undefined, "Check my pending tasks")}>
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-500/10 text-green-400 mt-0.5">
-                <CheckCircleIcon />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-zinc-200">3 follow-ups pending</p>
-                <p className="text-xs text-zinc-500">Follow up with John & Sarah</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Today's Schedule Widget */}
-        <div className="bg-[#131316] border border-[#1C1C1F] rounded-2xl p-5 flex-1 flex flex-col">
-          <div className="flex items-center mb-5 gap-2">
-            <span className="text-blue-400"><CalendarIcon /></span>
-            <h3 className="text-sm font-medium text-zinc-300">Today's Schedule</h3>
-          </div>
-          
-          <div className="flex-1 space-y-6 relative before:absolute before:inset-0 before:ml-2 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-zinc-800 before:to-transparent">
-            {dashboardData.todayEvents.length > 0 ? (
-              dashboardData.todayEvents.map((event: any, i: number) => {
-                const colors = ['bg-indigo-500', 'bg-blue-500', 'bg-yellow-500', 'bg-green-500'];
-                const dotColor = colors[i % colors.length];
-                return (
-                  <div key={event.id} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                    <div className={`flex items-center justify-center w-4 h-4 rounded-full border-4 border-[#131316] ${dotColor} absolute left-0 shrink-0 md:mx-auto md:left-1/2 md:-translate-x-1/2`}></div>
-                    <div className="w-[calc(100%-2rem)] md:w-[calc(50%-1.5rem)] ml-8 md:ml-0 pl-2 md:pl-0">
-                      <p className="text-sm font-medium text-zinc-200">{event.summary}</p>
-                      <p className="text-xs text-zinc-500 mt-0.5">
-                        {new Date(event.start.dateTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} - {new Date(event.end.dateTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                      </p>
-                    </div>
-                  </div>
-                )
-              })
-            ) : (
-               <div className="text-center text-sm text-zinc-500 mt-10">No events scheduled for today.</div>
-            )}
-          </div>
-          
-          <button className="mt-4 w-full rounded-xl bg-[#18181B] border border-zinc-800 py-2.5 text-sm font-medium text-zinc-300 hover:bg-[#1C1C1F] hover:text-white transition-colors">
-            View Calendar
-          </button>
+          <div className="text-center text-[10px] sm:text-xs text-zinc-500 mt-3">Maical AI can make mistakes. Verify important information.</div>
         </div>
 
       </div>
-
-      {/* Floating Explore Button */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 -ml-36">
-         <button className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-full text-sm font-medium shadow-[0_0_20px_rgba(99,102,241,0.5)] hover:scale-105 transition-all">
-           <SparklesIcon /> Explore Maical AI
-         </button>
-      </div>
-
     </div>
   );
 }
