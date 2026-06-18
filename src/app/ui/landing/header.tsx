@@ -20,7 +20,7 @@ export default function Header() {
               alt="Logo"
               width={140}
               height={48}
-              className="object-contain h-12 w-auto dark:invert dark:hue-rotate-180 dark:mix-blend-screen"
+              className="object-contain h-8 sm:h-12 w-auto dark:invert dark:hue-rotate-180 dark:mix-blend-screen shrink-0"
               priority
             />
           </Link>
@@ -61,14 +61,14 @@ export default function Header() {
           ) : session ? (
             <button
               onClick={() => router.push("/chat")}
-              className="flex items-center justify-center gap-2 rounded-full bg-blue-600 px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+              className="flex items-center justify-center gap-2 rounded-full bg-blue-600 px-4 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm font-medium text-white transition-colors hover:bg-blue-700 whitespace-nowrap shrink-0"
             >
               Dashboard
             </button>
           ) : (
             <button
               onClick={() => signIn("google", { callbackUrl: "/chat" })}
-              className="flex items-center justify-center gap-2 rounded-full bg-black px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
+              className="flex items-center justify-center gap-1.5 sm:gap-2 rounded-full bg-black px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-medium text-white transition-colors hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 whitespace-nowrap shrink-0"
             >
               <svg
                 className="h-4 w-4"
